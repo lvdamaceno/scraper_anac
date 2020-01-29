@@ -14,12 +14,12 @@ def request_page(url):
     return tag_a
 
 
-def get_links(data):
+def get_links(data, url):
     # cria uma lista apenas com os links tratados
     data_links = []
     for item in range(len(data)):
         text = data[item].get_text()
-        data_links.append(url_anac + text)
+        data_links.append(url + text)
     return data_links
 
 
@@ -32,12 +32,17 @@ def get_files(data, folder, link):
         print(f"Download de {text} em {end_timer - start_timer:0.4f} segundos")
 
 
-url_anac = 'https://sas.anac.gov.br/sas/vraarquivos/'
-data_anac = request_page(url_anac)
-data_links = get_links(data_anac)
-# cria pasta para os arquivos .csv
-folder = os.getcwd() + "/files"
-os.mkdir(folder)
-for link in data_links[1:-1]:
-    data = request_page(link)[1:]
-    get_files(data, folder, link)
+def main():
+    url_anac = 'https://sas.anac.gov.br/sas/vraarquivos/'
+    data_anac = request_page(url_anac)
+    data_links = get_links(data_anac, url_anac)
+    # cria pasta para os arquivos .csv
+    folder = os.getcwd() + "/files"
+    os.mkdir(folder)
+    for link in data_links[1:-1]:
+        data = request_page(link)[1:]
+        get_files(data, folder, link)
+
+
+if __name__ == "__main__":
+    main()
