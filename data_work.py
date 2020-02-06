@@ -1,3 +1,4 @@
+import os
 from os import listdir
 from os.path import isfile, join
 import pandas as pd
@@ -19,16 +20,18 @@ def year_list(path):
 
 files = files_list('files')
 years = year_list('files')
+folder = os.getcwd() + "/files_by_year"
+os.mkdir(folder)
 
-concat_year_df = pd.DataFrame(columns=['ICAO Empresa Aérea', 'Número Voo', 'Código Autorização (DI)', 'Código Tipo Linha',
-                                     'ICAO Aeródromo Origem', 'ICAO Aeródromoo Destino', 'Partida Prevista',
-                                     'Partida Real', 'Chegada Prevista', 'Chegada Real', 'Situação Voo',
-                                     'Código Justificativa'])
-for file in files:
-    if file[4:8] == years[0]:
-        tempDf = pd.read_csv(f'files/{file}', encoding='ISO-8859-1')
-        # limite de 100 primeiras linhas
-        concat_year_df = pd.concat([concat_year_df, tempDf.head(10)], ignore_index=True)
-    concat_year_df.to_csv(f'{years[0]}.csv')
+for year in years:
+    concat_year_df = pd.DataFrame()
+    for file in files:
+        if file[4:8] == year:
+            tempDf = pd.read_csv(f'files/{file}', encoding='ISO-8859-1', )
+            # limite de 5 primeiras linhas
+            concat_year_df = pd.concat([concat_year_df, tempDf.head(5)], ignore_index=True)
+        concat_year_df.to_csv(f'{folder}/{year}.csv')
+    print(f'Dataset {year}.csv salvo com sucesso.')
+print('Finalizado')
 
-print(concat_year_df)
+

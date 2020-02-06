@@ -146,6 +146,6 @@ pip-selfcheck.json
 
 # scraper_anac
 files
-filtered_files
+files_by_year
 .idea/
 .DS_Store
